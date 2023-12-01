@@ -11,6 +11,7 @@ public:
     enum class Type{button, ch, broken};
     Type type;
     int ch;
+    Input(){};
     Input(int);
 };
 

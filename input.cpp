@@ -10,6 +10,7 @@ Input::Input(int chin)
     case KEY_RIGHT:
     case KEY_LEFT:
     case KEY_DOWN:
+    case 27:
         type = Type::button;
         break;
     default:
