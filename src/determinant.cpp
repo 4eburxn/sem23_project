@@ -1,4 +1,4 @@
-#include "headers/determinant.h"
+#include "determinant.h"
 
 long double Matrix::determinant(vector<vector<long double>> matrix)
 {
