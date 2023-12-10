@@ -1,6 +1,6 @@
 #include "determinant.h"
 
-long double Matrix::determinant(vector<vector<long double>> matrix)
+long double Matrix::determinant(std::vector<std::vector<long double>> matrix)
 {
 	if (matrix.size() == 2)
 		return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
@@ -11,7 +11,7 @@ long double Matrix::determinant(vector<vector<long double>> matrix)
 		long double num = matrix[0][col]; long double det = 0;
 
 		//2 ������� ����� ������� ��� ��������� ���������� ������� col ��� 0 
-		vector<vector<long double>> new_matrix = matrix;
+		std::vector<std::vector<long double>> new_matrix = matrix;
 		New_Matrix(new_matrix, col);
 		
 		//3 ���� ������� ������� != 2 �� ������� determinant ��� ���������� 
@@ -25,7 +25,7 @@ long double Matrix::determinant(vector<vector<long double>> matrix)
 	return sum;
 }
 
-vector<vector<long double>> Matrix::New_Matrix(vector<vector<long double>>& new_matrix, int& col)
+std::vector<std::vector<long double>> Matrix::New_Matrix(std::vector<std::vector<long double>>& new_matrix, int& col)
 {
 	new_matrix.erase(new_matrix.begin());
 	for (int i = 0; i < new_matrix.size(); i++)
@@ -35,14 +35,14 @@ vector<vector<long double>> Matrix::New_Matrix(vector<vector<long double>>& new_
 	//DrawNewMatrix(new_matrix);
 	return new_matrix;
 }
-void Matrix::DrawNewMatrix(vector<vector<long double>>& new_matrix)
+void Matrix::DrawNewMatrix(std::vector<std::vector<long double>>& new_matrix)
 {
-	cout << endl << endl;
+	std::cout << std::endl << std::endl;
 	for (int i = 0; i < new_matrix.size(); i++)
 	{
 		for (auto& el : new_matrix[i])
-			cout << el << " ";
-		cout << endl;
+			std::cout << el << " ";
+		std::cout << std::endl;
 	}
 }
 
@@ -64,7 +64,7 @@ Matrix Matrix::operator- (Matrix sec_matrix)
 	Matrix ans;
 	for (int i = 0; i < n; i++)
 	{
-		vector <long double> nums;
+		std::vector <long double> nums;
 		for (int j = 0; j < m; j++)
 		{
 			nums.push_back(matrix[i][j] - sec_matrix.matrix[i][j]);
@@ -86,7 +86,7 @@ Matrix Matrix::transposition(Matrix sm_matrix)
 	Matrix ans;
 	for (int j = 0; j < sm_matrix.m; j++)
 	{
-		vector <long double> nums;
+		std::vector <long double> nums;
 		for (int i = 0; i < sm_matrix.n; i++)
 		{
 			nums.push_back(sm_matrix.matrix[i][j]);
