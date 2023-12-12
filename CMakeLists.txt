@@ -7,6 +7,7 @@ set(SOURCES test_main.cpp
             src/graphic.cpp
             src/function_table.cpp
             src/file_work.cpp
+            src/determinant.cpp
             )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

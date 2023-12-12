@@ -33,11 +33,36 @@ void ok_button_CB(Fl_Widget *, void*m){//FIXME!!!!!
     }
 }
 
+
+/*------------------------ActionMenu------------------------*/
+
+void ok_act_button_CB(Fl_Widget *, void*m){//FIXME!!!!!
+    ActionMenu& nfd = *(ActionMenu*)m;
+    if(nfd.Path1_display->value()!="" && nfd.Path2_display->value()!="" ){
+        Matrix mtrx1 = read_matrix_from_file(nfd.Path1_display->value());
+        Matrix mtrx2 = read_matrix_from_file(nfd.Path2_display->value());
+        if(mtrx1.m == mtrx2.n && nfd.call_file_chooser() == 0){
+            Matrix mtrx = mtrx1*mtrx2;
+            mtrx.path_to = nfd.FileChooser.filename();
+            write_matrix_to_file(mtrx);
+            nfd.Main->add_matrix(nfd.FileChooser.filename());
+            nfd.window->hide();
+        }
+    }
+}
+
+
 /*-----------------------Main_Window------------------------*/
 
 void new_file_CB(Fl_Widget *, void*m){
     Main_Window *Win = (Main_Window*)m;
     Win->newfiledialog.show();
+}
+
+void show_act_CB(Fl_Widget *, void *m)
+{
+    Main_Window *Win = (Main_Window*)m;
+    Win->actmenu.show();
 }
 
 void arrow_down_pressed(Fl_Widget *, void*m){//FIXME! Макароны
@@ -78,4 +103,38 @@ void browser_CB(Fl_Widget *a, void*m){
     arrow_up_pressed(a, m);
     arrow_left_pressed(a, m);
     Win->matrix_redrow(true);//with clear
+}
+
+void save_CB(Fl_Widget *a, void*m){
+    Main_Window *Win = (Main_Window*)m;
+    write_matrix_to_file(Win->OpenedMatrix[Win->OpenedNow]);
+}
+
+void save_as_CB(Fl_Widget *a, void*m){
+    Main_Window *Win = (Main_Window*)m;
+    Fl_Native_File_Chooser FileChooser;
+    FileChooser.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+    FileChooser.filter("*.mtrx");
+    FileChooser.directory("");
+    if(FileChooser.show() == 0){
+        Matrix cop = Win->OpenedMatrix[Win->OpenedNow];
+        cop.path_to = FileChooser.filename();
+        write_matrix_to_file(cop);
+    }
+}
+
+void open_CB(Fl_Widget *a, void *m){
+    Main_Window *Win = (Main_Window*)m;
+    Fl_Native_File_Chooser FileChooser;
+    FileChooser.type(Fl_Native_File_Chooser::BROWSE_FILE);
+    FileChooser.directory("");
+    if(FileChooser.show() == 0){
+        Win->add_matrix(FileChooser.filename());
+    }
+}
+
+void input_confirm_CB(Fl_Widget *a, void *m){
+    Main_Window *Win = (Main_Window*)m;
+    Win->OpenedMatrix[Win->OpenedNow].matrix[Win->mtrx_posY][Win->mtrx_posX]= strtod(Win->input->value(), NULL);
+    Win->matrix_redrow();
 }

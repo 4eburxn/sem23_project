@@ -17,14 +17,17 @@
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Native_File_Chooser.H>
 #include <FL/Fl_Value_Input.H>
+#include <FL/Fl_Float_Input.H>
 #include <FL/Fl_Hold_Browser.H>
 #include <FL/Fl_Int_Input.H>
+#include <FL/Fl_File_Input.H>
 #include <stdlib.h>
-
 
 #include "determinant.h"
 #include "function_table.h"
 #include "file_work.h"
+
+//FIXME! деструкторы
 
 class WINDOW
 {
@@ -56,6 +59,24 @@ public:
 
     NewFileDialog();
     void show();
+    int call_file_chooser();
+};
+
+
+class ActionMenu : public WINDOW{
+public:
+    Main_Window *Main; // fixme
+    Fl_Native_File_Chooser FileChooser;
+    std::vector<Fl_Button *> buttons = std::vector<Fl_Button *>((size_t)10, nullptr);  //более 10 кнопок нам не потребуется
+    enum Button_names{
+        cancel=0,
+        ok_button=1
+    };
+    Fl_File_Input *Path1_display;
+    Fl_File_Input *Path2_display;
+
+    ActionMenu();
+    void show(){window->show();}
     int call_file_chooser();
 };
 
@@ -114,18 +135,30 @@ public:
         arrow_down=2,
         arrow_left=3,
         arrow_up=4,
-        arrow_right=5
+        arrow_right=5,
+        confirm_float_input=6,
+        open_act_menu = 7
     };
     int mtrx_posX = 0,
         mtrx_posY = 0;
     Fl_Hold_Browser *brow;
+    Fl_Float_Input *input;
 
     MatrixDrower *mtrxdrow;
     NewFileDialog newfiledialog;
-    //WINDOW popupwin; //FIXME!
+    ActionMenu actmenu;
+    //WINDOW popupwin; //TODO
     
     void matrix_redrow(bool clear = false);
     void add_matrix(std::string filepath);
+
+    ~Main_Window(){
+        for(auto i:buttons){
+            delete i;
+            i = nullptr;
+        }
+        delete brow,input,mtrxdrow;
+    }
 };
 
 

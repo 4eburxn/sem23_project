@@ -1,6 +1,6 @@
 #include"graphic.h"
 #include"determinant.h"
-
+#include"function_table.h"
 
 NewFileDialog::NewFileDialog()
 {
@@ -27,9 +27,28 @@ NewFileDialog::NewFileDialog()
     window->add(Path_display);
 }
 
+ActionMenu::ActionMenu()
+{
+    FileChooser.title("Create a file");
+    FileChooser.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+    FileChooser.filter("*.mtrx");
+    FileChooser.directory("");
+    MakeWindow(400,300);
+    //MakeButton();
+    buttons[Button_names::ok_button] = MakeButton(340,270,60,30,"Ok"); //FIXME! add calback
+    buttons[Button_names::ok_button]->callback(ok_act_button_CB, (void*)this);
+    buttons[Button_names::cancel] = MakeButton(280,270,60,30,"Cancel");
+    //buttons[Button_names::cancel]->callback(cancel_button_CB, (void*)this);
+    Path1_display = new Fl_File_Input(40, 30, 360, 40,"path1:");
+    Path2_display = new Fl_File_Input(40, 100, 360, 40,"path2:");
+    window->add(Path1_display);
+    window->add(Path2_display);
+}
+
 void WINDOW::MakeWindow(int width, int height){
     window = new Fl_Window(width, height);
 }
+
 
 Fl_Button *WINDOW::MakeButton(int posX, int posY, int width, int height, const char *name)
 {
@@ -96,17 +115,18 @@ void Main_Window::init(){
     brow->callback(browser_CB, (void*)this);
     window->add(brow);
     Fl_Menu_Item menuitems[] = {
-  { "&File",              0, 0, 0, FL_SUBMENU },
-    { "&New File",        0, (Fl_Callback *)(new_file_CB), (void*)(this) },
-    { "&Open File",        0, 0, 0 },
-    { "&Safe File",        0, 0, 0 },
-    { 0 },
-  { "&Edit",              0, 0, 0, FL_SUBMENU },
-    { "&Undo",        0, 0, 0 },
-    { "&Redo",        0, 0, 0 },
-    { 0 },
-  { 0 }
-};
+    { "&File",              0, 0, 0, FL_SUBMENU },
+      { "&New File",        0, (Fl_Callback *)(new_file_CB), (void*)(this) },
+      { "&Open",        0, (Fl_Callback *)(open_CB), (void*)(this) },
+      { "&Safe File",        0, (Fl_Callback *)(save_CB), (void*)(this) }, //FIXME! Могут быть вызваны при отсутствии матрицы
+      { "&Safe as...",        0, (Fl_Callback *)(save_as_CB), (void*)(this) },
+      { 0 },
+    { "&Edit",              0, 0, 0, FL_SUBMENU },
+      { "&Undo",        0, 0, 0 },
+      { "&Redo",        0, 0, 0 }, //TODO
+      { 0 },
+    { 0 }
+  };
     MakeBar(0, 0, 800, 25, menuitems);
     buttons[Button_names::arrow_down] = MakeButton(675,200,50,50,"@2->");
     buttons[Button_names::arrow_down]->callback(arrow_down_pressed, (void*)this);
@@ -116,14 +136,24 @@ void Main_Window::init(){
     buttons[Button_names::arrow_up]->callback(arrow_up_pressed, (void*)this);
     buttons[Button_names::arrow_right] = MakeButton(725,150,50,50,"@->");
     buttons[Button_names::arrow_right]->callback(arrow_right_pressed, (void*)this);
+
+    buttons[Button_names::open_act_menu] = MakeButton(400,300,60,30,"multiply");
+    buttons[Button_names::open_act_menu]->callback(show_act_CB, (void*)this);
+
+
+    input = new Fl_Float_Input(300,250,245,30);
+    window->add(input);
+    buttons[Button_names::confirm_float_input] = MakeButton(545,250,30,30,"@returnarrow");
+    buttons[Button_names::confirm_float_input]->callback(input_confirm_CB, (void*)this);
     window->show();
+    actmenu.Main = this;
     newfiledialog.Main = this;
     mtrxdrow = new MatrixDrower(300,125,window);
 }
 
 void Main_Window::matrix_redrow(bool clear)
 {
-    std::cout<<mtrx_posX<<"\t"<<mtrx_posY<<std::endl;
+    input->value(std::format("{}",OpenedMatrix[OpenedNow].matrix[mtrx_posY][mtrx_posX]).c_str());
     mtrxdrow->draw(OpenedMatrix[OpenedNow],mtrx_posX,mtrx_posY,clear);
 }
 
@@ -148,6 +178,11 @@ void NewFileDialog::show()
 }
 
 int NewFileDialog::call_file_chooser()
+{
+    return FileChooser.show();
+}
+
+int ActionMenu::call_file_chooser()
 {
     return FileChooser.show();
 }
