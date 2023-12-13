@@ -18,6 +18,7 @@ void ok_button_CB(Fl_Widget *, void*m);
 
 
 void ok_act_button_CB(Fl_Widget *, void*m);
+void cancel_act_button_CB(Fl_Widget *, void*m);
 /*-----------------------Main_Window------------------------*/
 
 void new_file_CB(Fl_Widget *, void*m);

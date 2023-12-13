@@ -22,10 +22,9 @@ void ok_button_CB(Fl_Widget *, void*m){//FIXME!!!!!
     NewFileDialog& nfd = *(NewFileDialog*)m;
     if(atoi(nfd.width_of_matrix->value())>0 && atoi(nfd.height_of_matrix->value()) > 0 && nfd.ischoosed){
         std::vector<std::vector<long double>> a = std::vector<std::vector<long double>>(atoi(nfd.height_of_matrix->value()),std::vector<long double>(atoi(nfd.width_of_matrix->value()),0.));
-        Matrix mtrx;
-        mtrx.n = atoi(nfd.height_of_matrix->value());
-        mtrx.m = atoi(nfd.width_of_matrix->value());
-        mtrx.matrix = std::vector<std::vector<long double>>(a);
+        Matrix mtrx = Matrix(atoi(nfd.height_of_matrix->value()),
+                             atoi(nfd.width_of_matrix->value()),
+                             a);
         mtrx.path_to = nfd.choosed;
         write_matrix_to_file(mtrx);
         nfd.Main->add_matrix(nfd.choosed);
@@ -41,14 +40,27 @@ void ok_act_button_CB(Fl_Widget *, void*m){//FIXME!!!!!
     if(nfd.Path1_display->value()!="" && nfd.Path2_display->value()!="" ){
         Matrix mtrx1 = read_matrix_from_file(nfd.Path1_display->value());
         Matrix mtrx2 = read_matrix_from_file(nfd.Path2_display->value());
-        if(mtrx1.m == mtrx2.n && nfd.call_file_chooser() == 0){
+        if (mtrx1.is_broken or mtrx2.is_broken){
+            return;
+        }
+        if(mtrx1.GetM() == mtrx2.GetN() && nfd.call_file_chooser() == 0){
+            try{
             Matrix mtrx = mtrx1*mtrx2;
             mtrx.path_to = nfd.FileChooser.filename();
             write_matrix_to_file(mtrx);
             nfd.Main->add_matrix(nfd.FileChooser.filename());
             nfd.window->hide();
+            }
+            catch(...){
+                std::cerr << "incorrect matrix!!!"<<std::endl;
+            }
         }
     }
+}
+
+void cancel_act_button_CB(Fl_Widget *, void*m){
+    ActionMenu *nfd = (ActionMenu*)m;
+    nfd->window->hide();
 }
 
 
@@ -69,28 +81,28 @@ void arrow_down_pressed(Fl_Widget *, void*m){//FIXME! Макароны
     Main_Window *Win = (Main_Window*)m;
     if(Win->OpenedNow == -1)
     return;
-    Win->mtrx_posY = std::max(std::min(Win->mtrx_posY+1,Win->OpenedMatrix[Win->OpenedNow].n-1),0);
+    Win->mtrx_posY = std::max(std::min(Win->mtrx_posY+1,Win->OpenedMatrix[Win->OpenedNow].GetN()-1),0);
     Win->matrix_redrow();
 }
 void arrow_left_pressed(Fl_Widget *, void*m){
     Main_Window *Win = (Main_Window*)m;
     if(Win->OpenedNow == -1)
     return;
-    Win->mtrx_posX = std::max(std::min(Win->mtrx_posX-1,Win->OpenedMatrix[Win->OpenedNow].m-1),0);
+    Win->mtrx_posX = std::max(std::min(Win->mtrx_posX-1,Win->OpenedMatrix[Win->OpenedNow].GetM()-1),0);
     Win->matrix_redrow();
 }
 void arrow_up_pressed(Fl_Widget *, void*m){
     Main_Window *Win = (Main_Window*)m;
     if(Win->OpenedNow == -1)
     return;
-    Win->mtrx_posY = std::max(std::min(Win->mtrx_posY-1,Win->OpenedMatrix[Win->OpenedNow].n-1),0);
+    Win->mtrx_posY = std::max(std::min(Win->mtrx_posY-1,Win->OpenedMatrix[Win->OpenedNow].GetN()-1),0);
     Win->matrix_redrow();
 }
 void arrow_right_pressed(Fl_Widget *, void*m){
     Main_Window *Win = (Main_Window*)m;
     if(Win->OpenedNow == -1)
         return;
-    Win->mtrx_posX = std::max(std::min(Win->mtrx_posX+1,Win->OpenedMatrix[Win->OpenedNow].m-1),0);
+    Win->mtrx_posX = std::max(std::min(Win->mtrx_posX+1,Win->OpenedMatrix[Win->OpenedNow].GetM()-1),0);
     Win->matrix_redrow();
 }
 
@@ -98,7 +110,6 @@ void browser_CB(Fl_Widget *a, void*m){
     Main_Window *Win = (Main_Window*)m;
     if(Win->brow->value()==0)
         return;
-    std::cout<<Win->brow->value()<<std::endl;
     Win->OpenedNow = Win->brow->value()-1;
     arrow_up_pressed(a, m);
     arrow_left_pressed(a, m);

@@ -38,7 +38,7 @@ ActionMenu::ActionMenu()
     buttons[Button_names::ok_button] = MakeButton(340,270,60,30,"Ok"); //FIXME! add calback
     buttons[Button_names::ok_button]->callback(ok_act_button_CB, (void*)this);
     buttons[Button_names::cancel] = MakeButton(280,270,60,30,"Cancel");
-    //buttons[Button_names::cancel]->callback(cancel_button_CB, (void*)this);
+    buttons[Button_names::cancel]->callback(cancel_act_button_CB, (void*)this);
     Path1_display = new Fl_File_Input(40, 30, 360, 40,"path1:");
     Path2_display = new Fl_File_Input(40, 100, 360, 40,"path2:");
     window->add(Path1_display);
@@ -73,6 +73,7 @@ void MatrixDrower::draw(Matrix mtrx,size_t Hx, size_t Hy, bool clear/* = false*/
         for(int i = 0;i<3;i++)
         for(int j = 0;j<3;j++){
             displays[i][j].buffer->text("");
+            displays[i][j].highlight(true);
             numbers[i%2][j].buffer->text("");
         }
     }
@@ -160,6 +161,9 @@ void Main_Window::matrix_redrow(bool clear)
 void Main_Window::add_matrix(std::string filepath)
 {
     Matrix mtrx = read_matrix_from_file(filepath);
+    if(mtrx.is_broken){
+        return;
+    }
     mtrx.path_to=filepath;
     OpenedMatrix.push_back(mtrx);
     brow->add(filepath.c_str());

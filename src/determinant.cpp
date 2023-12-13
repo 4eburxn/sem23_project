@@ -2,7 +2,11 @@
 
 long double Matrix::determinant(std::vector<std::vector<long double>> matrix)
 {
-	if (matrix.size() == 2)
+	if (n != m)
+		throw std::logic_error("������������ ����� ������� ������ ��� ���������� ������");
+	if (matrix.size() == 1)
+		return matrix[0][0];
+	else if (matrix.size() == 2)
 		return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
 	long double sum = 0;
 	for (int col = 0; col < matrix.size(); col++)
@@ -49,6 +53,8 @@ void Matrix::DrawNewMatrix(std::vector<std::vector<long double>>& new_matrix)
 
 Matrix Matrix::operator+ (Matrix sec_matrix)
 {
+	if (n != sec_matrix.n and m != sec_matrix.m)
+		throw std::logic_error("������� ������ �����������");
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
@@ -61,7 +67,9 @@ Matrix Matrix::operator+ (Matrix sec_matrix)
 
 Matrix Matrix::operator- (Matrix sec_matrix)
 {
-	Matrix ans;
+	if (n != sec_matrix.n and m != sec_matrix.m)
+		throw std::logic_error("������� ������ �����������");
+	std::vector<std::vector<long double>> ans;
 	for (int i = 0; i < n; i++)
 	{
 		std::vector <long double> nums;
@@ -69,31 +77,46 @@ Matrix Matrix::operator- (Matrix sec_matrix)
 		{
 			nums.push_back(matrix[i][j] - sec_matrix.matrix[i][j]);
 		}
-		ans.matrix.push_back(nums);
+		ans.push_back(nums);
 	}
-	ans.n = sec_matrix.n;
-	ans.m = sec_matrix.m;
-	return ans;
+	return Matrix(sec_matrix.n, sec_matrix.m, ans);
 } 
 
 Matrix Matrix::operator* (Matrix sec_matrix)
 {
-	return Matrix();
-} 
-
-Matrix Matrix::transposition(Matrix sm_matrix)
-{
-	Matrix ans;
-	for (int j = 0; j < sm_matrix.m; j++)
+	if (m != sec_matrix.n)
+		throw std::logic_error("wrong matrix size");
+	std::vector<std::vector<long double>> new_matrix;
+	/*new_matrix.n = n;
+	new_matrix.m = sec_matrix.m;*/
+	for (int i = 0; i < n; i++)
 	{
 		std::vector <long double> nums;
-		for (int i = 0; i < sm_matrix.n; i++)
+		for (int k = 0; k < sec_matrix.m; k++)
 		{
-			nums.push_back(sm_matrix.matrix[i][j]);
+			int sum = 0;
+			for (int j = 0; j < m; j++)
+			{
+				sum += matrix[i][j] * sec_matrix.matrix[j][k];
+			}
+			nums.push_back(sum);
 		}
-		ans.matrix.push_back(nums);
+		new_matrix.push_back(nums);
 	}
-	ans.n = sm_matrix.m;
-	ans.m = sm_matrix.n;
-	return ans;
+	return Matrix(n, sec_matrix.m, new_matrix);
 } 
+
+Matrix Matrix::transposition()
+{
+	std::vector<std::vector<long double>> ans;
+	for (int j = 0; j < m; j++)
+	{
+		std::vector <long double> nums;
+		for (int i = 0; i < n; i++)
+		{
+			nums.push_back(matrix[i][j]);
+		}
+		ans.push_back(nums);
+	}
+	return Matrix(m, n, ans);
+}
