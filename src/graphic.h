@@ -1,7 +1,8 @@
 #ifndef __GRAPHIC_H__
 #define __GRAPHIC_H__ 1
-
-
+#ifdef _WIN32
+    #define WIN32
+#endif
 #include <iostream>
 #include <format>
 #include <FL/Fl.H>
@@ -27,10 +28,10 @@
 #include "function_table.h"
 #include "file_work.h"
 
-//FIXME! деструкторы
-
-class WINDOW
-{
+class WINDOW{ 
+    /***
+     * класс, отвечающий за создание окна, кнопок, и панели действий
+    */
 public:
     Fl_Window *window;
     void MakeWindow(int width, int height);
@@ -60,15 +61,13 @@ public:
     Fl_Int_Input *width_of_matrix;
     Fl_Int_Input *height_of_matrix;
     Fl_Text_Display *Path_display;
-    Fl_Text_Buffer * buffer;
+    Fl_Text_Buffer *buffer;
 
     NewFileDialog();
     void show();
     int call_file_chooser();
     ~NewFileDialog(){
         for(auto i:buttons){delete i;i = nullptr;}
-        delete width_of_matrix;
-        delete height_of_matrix;
         delete Path_display;
         delete buffer;
     }
@@ -77,7 +76,7 @@ public:
 
 class ActionMenu : public WINDOW{
 public:
-    Main_Window *Main; // fixme
+    Main_Window *Main; 
     Fl_Native_File_Chooser FileChooser;
     std::vector<Fl_Button *> buttons = std::vector<Fl_Button *>((size_t)10, nullptr);  //более 10 кнопок нам не потребуется
     enum Button_names{
@@ -167,8 +166,9 @@ public:
     Fl_Float_Input *input;
     Fl_Text_Buffer *buffer;
     Fl_Text_Display *det_output;
+    #ifndef _WIN32
     Fl_Check_Button *determinant_recalc;
-
+    #endif
     MatrixDrower *mtrxdrow;
     NewFileDialog newfiledialog;
     ActionMenu actmenu;
@@ -180,7 +180,8 @@ public:
     ~Main_Window(){
         for(auto i:buttons){delete i;i = nullptr;}
         delete mtrxdrow;
-        
+        delete det_output;
+        delete buffer;
     }
 };
 

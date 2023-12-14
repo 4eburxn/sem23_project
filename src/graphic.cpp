@@ -148,9 +148,10 @@ Main_Window::Main_Window(){
     buttons[Button_names::matrix_transpose] = MakeButton(390,335,90,30,"transpose");
     buttons[Button_names::matrix_transpose]->callback(transparent_CB, (void*)this);
 
-
+    #ifndef _WIN32
     determinant_recalc = new Fl_Check_Button(203,33,370,25,"recalculate matrix determinant on screen update");
     window->add(determinant_recalc);
+    #endif
     buffer = new Fl_Text_Buffer();
     det_output = new Fl_Text_Display(205,60,360,30);
     det_output->box(FL_SHADOW_FRAME);
@@ -170,8 +171,11 @@ Main_Window::Main_Window(){
 
 void Main_Window::matrix_redrow(bool clear)
 {
+    #ifndef _WIN32
     if((1==determinant_recalc->value()) &&(OpenedMatrix[OpenedNow].GetM()==OpenedMatrix[OpenedNow].GetN())&&OpenedMatrix[OpenedNow].GetM()<10){
-        
+    #else
+    if((OpenedMatrix[OpenedNow].GetM()==OpenedMatrix[OpenedNow].GetN())&&OpenedMatrix[OpenedNow].GetM()<10){
+    #endif
         det_output->show();
         std::string message = "Δ = ";
         std::cout<<OpenedMatrix[OpenedNow].determinant(OpenedMatrix[OpenedNow].matrix)<<std::endl;
