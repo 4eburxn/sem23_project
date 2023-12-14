@@ -5,7 +5,6 @@
 int main()
 {
     Main_Window win;
-    win.init();
     Fl::run();
 
     return 0;

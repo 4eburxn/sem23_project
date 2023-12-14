@@ -72,9 +72,9 @@ void MatrixDrower::draw(Matrix mtrx,size_t Hx, size_t Hy, bool clear/* = false*/
     if(clear){
         for(int i = 0;i<3;i++)
         for(int j = 0;j<3;j++){
-            displays[i][j].buffer->text("");
-            displays[i][j].highlight(true);
-            numbers[i%2][j].buffer->text("");
+            displays[i][j]->buffer->text("");
+            displays[i][j]->highlight(true);
+            numbers[i%2][j]->buffer->text("");
         }
     }
     int startX = Hx-1,stopX=Hx+2,
@@ -99,17 +99,17 @@ void MatrixDrower::draw(Matrix mtrx,size_t Hx, size_t Hy, bool clear/* = false*/
     }
     
     for(int i = startY;i<stopY;i++){
-        numbers[VERTICAL][i-startY].buffer->text(std::format("{}",i+1).c_str()); // c++20 module
+        numbers[VERTICAL][i-startY]->buffer->text(std::format("{}",i+1).c_str()); // c++20 module
         for(int j = startX;j<stopX;j++){
-            numbers[HORISONTAL][j-startX].buffer->text(std::format("{}",j+1).substr(0,8).c_str()); //FIXME
-            displays[i-startY][j-startX].buffer->text(std::format("{}",mtrx.matrix[i][j]).substr(0,8).c_str());
-            if(i==Hy&&j==Hx){displays[i-startY][j-startX].highlight();}
-            else{displays[i-startY][j-startX].highlight(true);}
+            numbers[HORISONTAL][j-startX]->buffer->text(std::format("{}",j+1).substr(0,8).c_str()); //FIXME
+            displays[i-startY][j-startX]->buffer->text(std::format("{}",mtrx.matrix[i][j]).substr(0,8).c_str());
+            if(i==Hy&&j==Hx){displays[i-startY][j-startX]->highlight();}
+            else{displays[i-startY][j-startX]->highlight(true);}
         }
     }
 }
 
-void Main_Window::init(){
+Main_Window::Main_Window(){
 
     MakeWindow(800,600);
     brow = new Fl_Hold_Browser(0,25,200,600-25);
@@ -122,10 +122,10 @@ void Main_Window::init(){
       { "&Safe File",        0, (Fl_Callback *)(save_CB), (void*)(this) }, //FIXME! Могут быть вызваны при отсутствии матрицы
       { "&Safe as...",        0, (Fl_Callback *)(save_as_CB), (void*)(this) },
       { 0 },
-    { "&Edit",              0, 0, 0, FL_SUBMENU },
-      { "&Undo",        0, 0, 0 },
-      { "&Redo",        0, 0, 0 }, //TODO
-      { 0 },
+    //{ "&Edit",              0, 0, 0, FL_SUBMENU },
+      //{ "&Undo",        0, 0, 0 },
+      //{ "&Redo",        0, 0, 0 }, //TODO
+      //{ 0 },
     { 0 }
   };
     MakeBar(0, 0, 800, 25, menuitems);

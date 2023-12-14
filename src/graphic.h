@@ -39,6 +39,7 @@ public:
     ~WINDOW(){
         window->clear();
         delete window;
+        window = nullptr;
     }
 };
 
@@ -64,6 +65,13 @@ public:
     NewFileDialog();
     void show();
     int call_file_chooser();
+    ~NewFileDialog(){
+        for(auto i:buttons){delete i;i = nullptr;}
+        delete width_of_matrix;
+        delete height_of_matrix;
+        delete Path_display;
+        delete buffer;
+    }
 };
 
 
@@ -82,6 +90,7 @@ public:
     ActionMenu();
     void show(){window->show();}
     int call_file_chooser();
+    ~ActionMenu(){for(auto i:buttons){i = nullptr;}}
 };
 
 
@@ -104,30 +113,38 @@ private:
         void highlight(bool reverce = false){
             if(!reverce){display->color(Fl_Color(2));}
             else{display->color(Fl_Color(7));}
-
+        }
+        ~Text_Display_Pbuff(){
+            delete display;
+            delete buffer;
         }
     };
-    Text_Display_Pbuff displays[3][3];
-    Text_Display_Pbuff numbers[2][3];
+    Text_Display_Pbuff *displays[3][3];
+    Text_Display_Pbuff *numbers[2][3];
 public:
     MatrixDrower(int Startx,int Starty, Fl_Window *win){
         Fl_Text_Buffer *buff;
         for(size_t i = 0;i<3;i++)
         {
             for(size_t j = 0;j<3;j++){
-                displays[j][i]=Text_Display_Pbuff(Startx+dispwidth*(i+1),Starty+dispheight*(j+1),dispwidth,dispheight,win);
+                displays[j][i]=new Text_Display_Pbuff(Startx+dispwidth*(i+1),Starty+dispheight*(j+1),dispwidth,dispheight,win);
             }
-            numbers[HORISONTAL][i]=Text_Display_Pbuff(Startx+dispwidth*(i+1),Starty,dispwidth,dispheight,win);
-            numbers[VERTICAL][i]=Text_Display_Pbuff(Startx,Starty+dispheight*(i+1),dispwidth,dispheight,win);
+            numbers[HORISONTAL][i]=new Text_Display_Pbuff(Startx+dispwidth*(i+1),Starty,dispwidth,dispheight,win);
+            numbers[VERTICAL][i]=new Text_Display_Pbuff(Startx,Starty+dispheight*(i+1),dispwidth,dispheight,win);
         }
     }
     void draw(Matrix mtrx,size_t Hx, size_t Hy, bool clear = false);
+    ~MatrixDrower(){
+        for(int i =0;i<3;i++)
+        for(int j =0;j<3;j++){delete displays[i][j];displays[i][j] = nullptr;}
+        for(int i =0;i<2;i++)
+        for(int j =0;j<3;j++){delete numbers[i][j];numbers[i][j] = nullptr;}}
 };
 
 
 class Main_Window : public WINDOW{
 public:
-    void init();
+    Main_Window();
 
     std::vector<Matrix> OpenedMatrix;
     size_t OpenedNow=-1;
@@ -148,7 +165,7 @@ public:
         mtrx_posY = 0;
     Fl_Hold_Browser *brow;
     Fl_Float_Input *input;
-    Fl_Text_Buffer * buffer;
+    Fl_Text_Buffer *buffer;
     Fl_Text_Display *det_output;
     Fl_Check_Button *determinant_recalc;
 
@@ -161,11 +178,9 @@ public:
     void add_matrix(std::string filepath);
 
     ~Main_Window(){
-        for(auto i:buttons){
-            delete i;
-            i = nullptr;
-        }
-        delete brow,input,mtrxdrow;
+        for(auto i:buttons){delete i;i = nullptr;}
+        delete mtrxdrow;
+        
     }
 };
 

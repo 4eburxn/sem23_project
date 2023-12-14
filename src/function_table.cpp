@@ -69,6 +69,7 @@ void cancel_act_button_CB(Fl_Widget *, void*m){
 void transparent_CB(Fl_Widget *, void *m)
 {
     Main_Window *Win = (Main_Window*)m;
+    if(Win->OpenedNow == -1){return;}
     Win->OpenedMatrix[Win->OpenedNow] = Win->OpenedMatrix[Win->OpenedNow].transposition();
     Win->matrix_redrow(true);
 }
@@ -154,6 +155,7 @@ void open_CB(Fl_Widget *a, void *m){
 
 void input_confirm_CB(Fl_Widget *a, void *m){
     Main_Window *Win = (Main_Window*)m;
+    if(Win->OpenedNow == -1){return;}
     Win->OpenedMatrix[Win->OpenedNow].matrix[Win->mtrx_posY][Win->mtrx_posX]= strtod(Win->input->value(), NULL);
     Win->matrix_redrow();
 }
