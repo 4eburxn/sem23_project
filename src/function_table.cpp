@@ -66,7 +66,15 @@ void cancel_act_button_CB(Fl_Widget *, void*m){
 
 /*-----------------------Main_Window------------------------*/
 
-void new_file_CB(Fl_Widget *, void*m){
+void transparent_CB(Fl_Widget *, void *m)
+{
+    Main_Window *Win = (Main_Window*)m;
+    Win->OpenedMatrix[Win->OpenedNow] = Win->OpenedMatrix[Win->OpenedNow].transposition();
+    Win->matrix_redrow(true);
+}
+
+void new_file_CB(Fl_Widget *, void *m)
+{
     Main_Window *Win = (Main_Window*)m;
     Win->newfiledialog.show();
 }

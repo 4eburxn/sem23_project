@@ -21,6 +21,9 @@ void ok_act_button_CB(Fl_Widget *, void*m);
 void cancel_act_button_CB(Fl_Widget *, void*m);
 /*-----------------------Main_Window------------------------*/
 
+
+void transparent_CB(Fl_Widget *, void*m);
+
 void new_file_CB(Fl_Widget *, void*m);
 
 void show_act_CB(Fl_Widget *, void*m);

@@ -130,17 +130,33 @@ void Main_Window::init(){
   };
     MakeBar(0, 0, 800, 25, menuitems);
     buttons[Button_names::arrow_down] = MakeButton(675,200,50,50,"@2->");
+    buttons[Button_names::arrow_down]->shortcut(FL_ALT+FL_Down);
     buttons[Button_names::arrow_down]->callback(arrow_down_pressed, (void*)this);
     buttons[Button_names::arrow_left] = MakeButton(625,150,50,50,"@4->");
+    buttons[Button_names::arrow_left]->shortcut(FL_ALT+FL_Left);
     buttons[Button_names::arrow_left]->callback(arrow_left_pressed, (void*)this);
     buttons[Button_names::arrow_up] = MakeButton(675,100,50,50,"@8->");
+    buttons[Button_names::arrow_up]->shortcut(FL_ALT+FL_Up);
     buttons[Button_names::arrow_up]->callback(arrow_up_pressed, (void*)this);
     buttons[Button_names::arrow_right] = MakeButton(725,150,50,50,"@->");
+    buttons[Button_names::arrow_right]->shortcut(FL_ALT+FL_Right);
     buttons[Button_names::arrow_right]->callback(arrow_right_pressed, (void*)this);
 
-    buttons[Button_names::open_act_menu] = MakeButton(400,300,60,30,"multiply");
+    buttons[Button_names::open_act_menu] = MakeButton(400,300,70,30,"multiply");
     buttons[Button_names::open_act_menu]->callback(show_act_CB, (void*)this);
 
+    buttons[Button_names::matrix_transpose] = MakeButton(390,335,90,30,"transpose");
+    buttons[Button_names::matrix_transpose]->callback(transparent_CB, (void*)this);
+
+
+    determinant_recalc = new Fl_Check_Button(203,33,370,25,"recalculate matrix determinant on screen update");
+    window->add(determinant_recalc);
+    buffer = new Fl_Text_Buffer();
+    det_output = new Fl_Text_Display(205,60,360,30);
+    det_output->box(FL_SHADOW_FRAME);
+    det_output->buffer(buffer);
+    det_output->hide();
+    window->add(det_output);
 
     input = new Fl_Float_Input(300,250,245,30);
     window->add(input);
@@ -154,6 +170,17 @@ void Main_Window::init(){
 
 void Main_Window::matrix_redrow(bool clear)
 {
+    if((1==determinant_recalc->value()) &&(OpenedMatrix[OpenedNow].GetM()==OpenedMatrix[OpenedNow].GetN())&&OpenedMatrix[OpenedNow].GetM()<10){
+        
+        det_output->show();
+        std::string message = "Δ = ";
+        std::cout<<OpenedMatrix[OpenedNow].determinant(OpenedMatrix[OpenedNow].matrix)<<std::endl;
+        message=message+std::format("{}",OpenedMatrix[OpenedNow].determinant(OpenedMatrix[OpenedNow].matrix));
+        buffer->text(message.c_str());
+    }
+    else{
+        det_output->hide();
+    }
     input->value(std::format("{}",OpenedMatrix[OpenedNow].matrix[mtrx_posY][mtrx_posX]).c_str());
     mtrxdrow->draw(OpenedMatrix[OpenedNow],mtrx_posX,mtrx_posY,clear);
 }

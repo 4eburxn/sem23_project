@@ -36,6 +36,10 @@ public:
     void MakeWindow(int width, int height);
     Fl_Button *MakeButton(int posX, int posY, int width, int height, const char *name = "");
     Fl_Menu_Bar *MakeBar(int posX, int posY, int width, int height, Fl_Menu_Item menuitems[]);
+    ~WINDOW(){
+        window->clear();
+        delete window;
+    }
 };
 
 
@@ -137,12 +141,16 @@ public:
         arrow_up=4,
         arrow_right=5,
         confirm_float_input=6,
-        open_act_menu = 7
+        open_act_menu = 7,
+        matrix_transpose = 8
     };
     int mtrx_posX = 0,
         mtrx_posY = 0;
     Fl_Hold_Browser *brow;
     Fl_Float_Input *input;
+    Fl_Text_Buffer * buffer;
+    Fl_Text_Display *det_output;
+    Fl_Check_Button *determinant_recalc;
 
     MatrixDrower *mtrxdrow;
     NewFileDialog newfiledialog;

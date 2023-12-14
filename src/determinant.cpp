@@ -1,21 +1,21 @@
 #include "determinant.h"
 
-long double Matrix::determinant(std::vector<std::vector<long double>> matrix)
+long double Matrix::determinant(std::vector<std::vector<long double>> matrix_)
 {
 	if (n != m)
 		throw std::logic_error("������������ ����� ������� ������ ��� ���������� ������");
-	if (matrix.size() == 1)
-		return matrix[0][0];
-	else if (matrix.size() == 2)
-		return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+	if (matrix_.size() == 1)
+		return matrix_[0][0];
+	else if (matrix_.size() == 2)
+		return matrix_[0][0] * matrix_[1][1] - matrix_[0][1] * matrix_[1][0];
 	long double sum = 0;
-	for (int col = 0; col < matrix.size(); col++)
+	for (int col = 0; col < matrix_.size(); col++)
 	{
 		//1 ���������� ����� �� 0 ������ col ������� �� num � ������������ ���������� �� det
-		long double num = matrix[0][col]; long double det = 0;
+		long double num = matrix_[0][col]; long double det = 0;
 
 		//2 ������� ����� ������� ��� ��������� ���������� ������� col ��� 0 
-		std::vector<std::vector<long double>> new_matrix = matrix;
+		std::vector<std::vector<long double>> new_matrix = matrix_;
 		New_Matrix(new_matrix, col);
 		
 		//3 ���� ������� ������� != 2 �� ������� determinant ��� ���������� 
