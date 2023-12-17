@@ -31,11 +31,11 @@
 ## Диаграмма классов:
 
 ```mermaid
-graph LR
+graph TD
 A[Graph_lib::Window]--> B(Screen)
 A --> C(InputMenu)
 D[input_data]
-E[Fl_Group] --> F[SliderInput]
+E[Fl_Group] --> F(SliderInput)
 G[SliderInput] 
 H[Player]
 ```

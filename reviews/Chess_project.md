@@ -35,13 +35,11 @@ A --> G(Circcle) --> I(DangerSign)
 A --> N(Image) --> O(Figure)
 
 J[FL_Window]--> K(Window)
-K --> L[Simple_Window] -->
-M[VisualSteps]
+K --> L(Simple_Window) -->
+M(VisualSteps)
 
 a[Widget] --> b(Button) --> c(Cell)
-```
-```mermaid
-graph TD
+
 d[Sub_Vector_ref]
 e[VisualSteps]
 ```
