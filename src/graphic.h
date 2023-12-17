@@ -7,17 +7,11 @@
 #include <format>
 #include <FL/Fl.H>
 #include <FL/Fl_Button.H>
-//#include <FL/Fl_Double_Window.H>
-//#include <FL/fl_draw.H>
-//#include <FL/Fl_Box.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Enumerations.H>
 #include <FL/Fl_Text_Editor.H>
-//#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Menu_Bar.H>
-//#include <FL/Fl_Scroll.H>
 #include <FL/Fl_Native_File_Chooser.H>
-//#include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Float_Input.H>
 #include <FL/Fl_Hold_Browser.H>
 #include <FL/Fl_Int_Input.H>
@@ -25,7 +19,6 @@
 #include <stdlib.h>
 
 #include "determinant.h"
-#include "function_table.h"
 #include "file_work.h"
 
 class WINDOW{ 

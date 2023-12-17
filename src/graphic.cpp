@@ -39,8 +39,8 @@ ActionMenu::ActionMenu()
     buttons[Button_names::ok_button]->callback(ok_act_button_CB, (void*)this);
     buttons[Button_names::cancel] = MakeButton(280,270,60,30,"Cancel");
     buttons[Button_names::cancel]->callback(cancel_act_button_CB, (void*)this);
-    Path1_display = new Fl_File_Input(40, 30, 360, 40,"path1:");
-    Path2_display = new Fl_File_Input(40, 100, 360, 40,"path2:");
+    Path1_display = new Fl_File_Input(70, 30, 330, 40,"path1:");
+    Path2_display = new Fl_File_Input(70, 100, 330, 40,"path2:");
     window->add(Path1_display);
     window->add(Path2_display);
 }

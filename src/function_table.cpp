@@ -46,6 +46,7 @@ void ok_act_button_CB(Fl_Widget *, void*m){//FIXME!!!!!
         if(mtrx1.GetM() == mtrx2.GetN() && nfd.call_file_chooser() == 0){
             try{
             Matrix mtrx = mtrx1*mtrx2;
+            std::cout << mtrx.is_broken<<std::endl;
             mtrx.path_to = nfd.FileChooser.filename();
             write_matrix_to_file(mtrx);
             nfd.Main->add_matrix(nfd.FileChooser.filename());
@@ -127,6 +128,7 @@ void browser_CB(Fl_Widget *a, void*m){
 
 void save_CB(Fl_Widget *a, void*m){
     Main_Window *Win = (Main_Window*)m;
+    std::cout<<Win->OpenedMatrix[Win->OpenedNow].path_to<<std::endl;
     write_matrix_to_file(Win->OpenedMatrix[Win->OpenedNow]);
 }
 
