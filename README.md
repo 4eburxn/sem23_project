@@ -10,7 +10,7 @@
 
 ## пример работы программы
 <object width="425" height="350">
-  <param name="movie" value="http://www.youtube.com/user/wwwLoveWatercom?v=BTRN1YETpyg" />
+  <param name="movie" value="https://youtu.be/BVvUGxZMhoM" />
   <param name="wmode" value="transparent" />
   <embed src="https://youtu.be/BVvUGxZMhoM"
          type="application/x-shockwave-flash"
